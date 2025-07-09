@@ -4,20 +4,20 @@ import { carData } from "./carData";
 const partsCatalog = {
     Suspension: {
         KW: [{ model: "V3 Coilovers", price: 2499, link: "#" }],
-        Bilstein: [{ model: "B16", price: 1800, link: "#" }]
+        Bilstein: [{ model: "B16", price: 1800, link: "#" }],
     },
     Exhaust: {
         Akrapovic: [{ model: "Slip-On", price: 3000, link: "#" }],
-        Remus: [{ model: "Sport Exhaust", price: 1500, link: "#" }]
+        Remus: [{ model: "Sport Exhaust", price: 1500, link: "#" }],
     },
     Wheels: {
         BBS: [{ model: "LM 18x9", price: 3400, link: "#" }],
-        Enkei: [{ model: "RPF1", price: 1200, link: "#" }]
+        Enkei: [{ model: "RPF1", price: 1200, link: "#" }],
     },
     Intake: {
         Eventuri: [{ model: "Carbon Intake", price: 1300, link: "#" }],
-        AEM: [{ model: "Cold Air", price: 450, link: "#" }]
-    }
+        AEM: [{ model: "Cold Air", price: 450, link: "#" }],
+    },
 };
 
 export default function Builder() {
@@ -31,16 +31,18 @@ export default function Builder() {
 
     const makes = Object.keys(carData);
     const models = selectedMake ? Object.keys(carData[selectedMake].models) : [];
-    const trims = selectedMake && selectedModel ? carData[selectedMake].models[selectedModel] : [];
-    // For year, assuming carData includes years; if not, add a default range
-    const years = selectedMake && selectedModel && selectedTrim
-        ? carData[selectedMake].years?.[selectedModel]?.[selectedTrim] || []
-        : [];
+    const trims =
+        selectedMake && selectedModel ? carData[selectedMake].models[selectedModel] : [];
+    // You can remove or adjust years if your carData doesn't have it
+    const years =
+        selectedMake && selectedModel && selectedTrim
+            ? carData[selectedMake].years?.[selectedModel]?.[selectedTrim] || []
+            : [];
 
     const toggleCategory = (category) => {
         setExpandedCategories((prev) => ({
             ...prev,
-            [category]: !prev[category]
+            [category]: !prev[category],
         }));
     };
 
@@ -49,23 +51,39 @@ export default function Builder() {
             ...prev,
             [category]: {
                 ...prev[category],
-                [brand]: !prev[category]?.[brand]
-            }
+                [brand]: !prev[category]?.[brand],
+            },
         }));
     };
 
     const handleAddPart = (category, brand, part) => {
         setSelectedParts((prev) => ({
             ...prev,
-            [category]: { brand, ...part }
+            [category]: { brand, ...part },
         }));
     };
 
-    const totalPrice = Object.values(selectedParts).reduce((acc, part) => acc + part.price, 0);
+    const totalPrice = Object.values(selectedParts).reduce(
+        (acc, part) => acc + part.price,
+        0
+    );
 
     return (
-        <div style={{ display: "flex", height: "100vh", fontFamily: "Arial, sans-serif" }}>
-            <aside style={{ width: 300, padding: 20, borderRight: "1px solid #ccc", overflowY: "auto" }}>
+        <div
+            style={{
+                display: "flex",
+                height: "100vh",
+                fontFamily: "Arial, sans-serif",
+            }}
+        >
+            <aside
+                style={{
+                    width: 300,
+                    padding: 20,
+                    borderRight: "1px solid #ccc",
+                    overflowY: "auto",
+                }}
+            >
                 <h3>Select Your Car</h3>
                 <label>
                     Make:
@@ -82,11 +100,14 @@ export default function Builder() {
                     >
                         <option value="">-- Select Make --</option>
                         {makes.map((make) => (
-                            <option key={make} value={make}>{make}</option>
+                            <option key={make} value={make}>
+                                {make}
+                            </option>
                         ))}
                     </select>
                 </label>
-                <br /><br />
+                <br />
+                <br />
                 <label>
                     Model:
                     <select
@@ -102,11 +123,14 @@ export default function Builder() {
                     >
                         <option value="">-- Select Model --</option>
                         {models.map((model) => (
-                            <option key={model} value={model}>{model}</option>
+                            <option key={model} value={model}>
+                                {model}
+                            </option>
                         ))}
                     </select>
                 </label>
-                <br /><br />
+                <br />
+                <br />
                 <label>
                     Trim:
                     <select
@@ -121,11 +145,14 @@ export default function Builder() {
                     >
                         <option value="">-- Select Trim --</option>
                         {trims.map((trim) => (
-                            <option key={trim} value={trim}>{trim}</option>
+                            <option key={trim} value={trim}>
+                                {trim}
+                            </option>
                         ))}
                     </select>
                 </label>
-                <br /><br />
+                <br />
+                <br />
                 <label>
                     Year:
                     <select
@@ -137,17 +164,22 @@ export default function Builder() {
                         <option value="">-- Select Year --</option>
                         {(years.length > 0
                             ? years
-                            : Array.from({ length: 30 }, (_, i) => `${1990 + i}`) // default 1990-2019
+                            : Array.from({ length: 30 }, (_, i) => `${1990 + i}`)
                         ).map((year) => (
-                            <option key={year} value={year}>{year}</option>
+                            <option key={year} value={year}>
+                                {year}
+                            </option>
                         ))}
                     </select>
                 </label>
-                <br /><br />
+                <br />
+                <br />
                 {selectedMake && selectedModel && selectedTrim && selectedYear && (
                     <div>
                         <strong>Selected Car:</strong>
-                        <p>{selectedMake} {selectedModel} {selectedTrim} ({selectedYear})</p>
+                        <p>
+                            {selectedMake} {selectedModel} {selectedTrim} ({selectedYear})
+                        </p>
                     </div>
                 )}
             </aside>
@@ -156,13 +188,19 @@ export default function Builder() {
                 <h2>Parts Catalog</h2>
                 {Object.entries(partsCatalog).map(([category, brands]) => (
                     <div key={category} style={{ marginBottom: 20 }}>
-                        <h3 style={{ cursor: "pointer" }} onClick={() => toggleCategory(category)}>
+                        <h3
+                            style={{ cursor: "pointer" }}
+                            onClick={() => toggleCategory(category)}
+                        >
                             {expandedCategories[category] ? "− " : "+ "} {category}
                         </h3>
                         {expandedCategories[category] &&
                             Object.entries(brands).map(([brand, parts]) => (
                                 <div key={brand} style={{ marginLeft: 20, marginBottom: 10 }}>
-                                    <h4 style={{ cursor: "pointer" }} onClick={() => toggleBrand(category, brand)}>
+                                    <h4
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => toggleBrand(category, brand)}
+                                    >
                                         {expandedBrands[category]?.[brand] ? "− " : "+ "} {brand}
                                     </h4>
                                     {expandedBrands[category]?.[brand] &&
@@ -174,11 +212,15 @@ export default function Builder() {
                                                     display: "flex",
                                                     justifyContent: "space-between",
                                                     alignItems: "center",
-                                                    marginBottom: 5
+                                                    marginBottom: 5,
                                                 }}
                                             >
-                                                <span>{part.model} — ${part.price}</span>
-                                                <button onClick={() => handleAddPart(category, brand, part)}>
+                                                <span>
+                                                    {part.model} — ${part.price}
+                                                </span>
+                                                <button
+                                                    onClick={() => handleAddPart(category, brand, part)}
+                                                >
                                                     Add
                                                 </button>
                                             </div>
@@ -210,25 +252,7 @@ export default function Builder() {
                                     <td style={{ padding: "8px" }}>{category}</td>
                                     <td style={{ padding: "8px" }}>{part.brand}</td>
                                     <td style={{ padding: "8px" }}>{part.model}</td>
-                                    <td style={{ padding: "8px", textAlign: "right" }}>${part.price}</td>
-                                    <td style={{ padding: "8px", textAlign: "center" }}>
-                                        <a href={part.link} target="_blank" rel="noopener noreferrer">Buy</a>
+                                    <td style={{ padding: "8px", textAlign: "right" }}>
+                                        ${part.price}
                                     </td>
-                                </tr>
-                            ))}
-                            <tr>
-                                <td colSpan={3} style={{ padding: "8px", textAlign: "right", fontWeight: "bold" }}>
-                                    Total:
-                                </td>
-                                <td style={{ padding: "8px", fontWeight: "bold", textAlign: "right" }}>
-                                    ${totalPrice.toLocaleString()}
-                                </td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                )}
-
-                <p style={{ marginTop: 20, fontSize: 12, color: "#666" }}>
-                    * CarBuildPicker may receive compensation for purchases made at participating retailers linked on this site.
-                    This compensat
+                                    <td style=
